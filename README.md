@@ -11,4 +11,4 @@ Portal para descoberta e divulgação de negócios e serviços. Stack: Next.js, 
 4) npm run prisma:generate
 5) npm run prisma:migrate
 6) npm run seed
-7) npm run dev
+7) npm run devgit push -u origin main
