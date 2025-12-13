@@ -1,0 +1,14 @@
+/* estilos glogais */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  @apply bg-soft text-ink;
+  scroll-behavior: smooth;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-soft transition hover:shadow-lg;
+}
