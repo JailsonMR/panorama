@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AdStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  passwordHash   String
+  phoneWhatsApp  String
+  role           Role     @default(USER)
+  ads            Ad[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  PasswordReset  PasswordReset[]
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  ads   Ad[]
+}
+
+model Ad {
+  id              String    @id @default(cuid())
+  title           String
+  description     String
+  price           Decimal   @db.Decimal(10,2)
+  neighborhood    String
+  contactWhatsApp String
+  contactsJson    Json?
+  hours           String
+  status          AdStatus  @default(PENDING)
+  images          Image[]
+  user            User      @relation(fields: [userId], references: [id])
+  userId          String
+  category        Category  @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  views           Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Image {
+  id    String @id @default(cuid())
+  url   String
+  ad    Ad     @relation(fields: [adId], references: [id])
+  adId  String
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
